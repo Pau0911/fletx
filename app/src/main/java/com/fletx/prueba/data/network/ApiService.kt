@@ -11,7 +11,6 @@ class ApiService @Inject constructor(private  val api:ApiClient) {
     suspend fun getData():List<Vehicle>{
         return withContext(Dispatchers.IO){
             val response = api.getVehicles()
-            Log.d("response","code"+ (response.body()?.message))
             response.body()?.data ?: emptyList()
         }
     }

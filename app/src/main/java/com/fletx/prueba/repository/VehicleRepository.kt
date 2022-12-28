@@ -8,10 +8,8 @@ import javax.inject.Inject
 class VehicleRepository @Inject constructor(
     private  val api: ApiService
 ){
-
     suspend fun getDataFromApi(): List<Vehicle> {
         val response:List<Vehicle> =api.getData()
-        Log.d("prueba","hola"+response.get(0))
         return response
     }
 
