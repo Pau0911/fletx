@@ -1,8 +1,8 @@
 package com.fletx.pruebA.ui.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-
 import com.fletx.pruebA.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -10,34 +10,45 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlin.properties.Delegates
 
 
 class VehicleMap : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-    lateinit var ubicacion: String
+    private lateinit var ubicacion: String
+    private var longitude by Delegates.notNull<Double>()
+    private var latitude by Delegates.notNull<Double>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+        ubicacion = intent.getStringExtra("ubicacion").toString()
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        ubicacion = intent.getStringExtra("ubicacion").toString()
 
+        getLocation()
     }
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-74.2690526,4.7434159 )
+        val lugar = LatLng(latitude, longitude)
         mMap.addMarker(
             MarkerOptions()
-                .position(sydney)
-                .title("Marker del vehiculo")
+                .position(lugar)
+                .visible(true)
+                .title("Ubicación del vehiculo")
         )
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(lugar))
     }
 
+    fun getLocation() {
+        val newUbication = ubicacion.substring(ubicacion.indexOf("(") + 1, ubicacion.indexOf(")"))
+        val s = newUbication.split(" ").toTypedArray()
+        latitude = s[0].toDouble()
+        longitude = s[1].toDouble()
+    }
 
 }
