@@ -45,12 +45,9 @@ class VehicleAdapter(
 
         init {
             itemView.setOnClickListener {
-                Log.d(TAG, "itemView OnClick: ${currentVehicle?.placa}")
                 onClick(currentVehicle)
             }
         }
-
-        /* Bind Contact name and image. */
         fun bind(vehicle: Vehicle?) {
             currentVehicle = vehicle
 
